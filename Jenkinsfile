@@ -6,7 +6,7 @@ pipeline {
         
         stage("Git Checkout"){
             steps{
-                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/priya241302/Secreat-Santa.git'
+                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/priya241302/Santa-CD.git'
         }
         }
          stage('Update GIT') {
@@ -17,7 +17,7 @@ pipeline {
                         sh "git config user.email haripriyapogaku@gmail.com"
                         sh "git config user.name priya241302"
                       
-                        sh "cat deployment.yaml"
+                        sh "cat deploymentservice.yaml"
                         sh "sed -i 's+priya247/secreatsanta.*+priya247/secreatsanta:${DOCKERTAG}+g' deploymentservice.yaml"
                         sh "cat deploymentservice.yaml"
                         sh "git add ."
