@@ -6,10 +6,11 @@ pipeline {
         
         stage("Git Checkout"){
             steps{
-                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/priya241302/Santa-CD.git'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/priya241302/Santa-CD.git'
         }
         }
          stage('Update GIT') {
+             steps{
             script {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
@@ -26,7 +27,7 @@ pipeline {
 
 
                         
-                        
+                    }    
         }
     }
   }
