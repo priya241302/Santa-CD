@@ -1,15 +1,7 @@
 pipeline {
     agent any 
     
-    tools{
-        jdk 'jdk17'
-        maven 'maven3'
-    }
-     environment {
-        SCANNER_HOME=tool 'sonar-scanner'
-    }
-
-     
+    
     stages{
         
         stage("Git Checkout"){
@@ -17,3 +9,27 @@ pipeline {
                 git branch: 'master', changelog: false, poll: false, url: 'https://github.com/priya241302/Secreat-Santa.git'
         }
         }
+         stage('Update GIT') {
+            script {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                      
+                        sh "git config user.email haripriyapogaku@gmail.com"
+                        sh "git config user.name priya241302"
+                      
+                        sh "cat deployment.yaml"
+                        sh "sed -i 's+priya247/secreatsanta.*+priya247/secreatsanta:${DOCKERTAG}+g' deploymentservice.yaml"
+                        sh "cat deploymentservice.yaml"
+                        sh "git add ."
+                        sh "git commit -m 'By Jenkins Job changemanifest: ${env.BUILD_NUMBER}'"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/Santa-CD.git HEAD:main" 
+
+
+                        
+                        
+        }
+    }
+  }
+        }
+    }
+}
